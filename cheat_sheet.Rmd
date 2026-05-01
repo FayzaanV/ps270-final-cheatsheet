@@ -1,5 +1,5 @@
 ---
-title: "cheat_sheet"
+title: "Polisci 270 Final Cheat Sheet"
 author: "Fayzaan Virk"
 date: "2026-05-01"
 output: pdf_document
@@ -8,24 +8,119 @@ toc: true
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(gapminder)
 ```
 
-## R Markdown
+## Data Wrangling
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+Data wrangling is the process of taking a complicated data set and making it easier to work with. This can mean filtering or selecting only a certain number or rows or columns, adding new variables, or pivoting the table. In R, we use the group_by(), summarize(), pivot_wider(), mutate(), filter(), select(), pivot_longer(), and the three join() commands to wrangle our data.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+I will use the gapminder data set to demonstrate some of these commands
 
-```{r cars}
-summary(cars)
+### group_by() and summarize()
+
+First, I can use the group_by() and summarize() commands to find the mean GDP per capita for each continent.
+
+```{r}
+gapminder |>
+  group_by(continent) |>
+  summarize(mean_gdppc = mean(gdpPercap))
 ```
 
-## Including Plots
+### filter() and select()
 
-You can also embed plots, for example:
+I can use the filter() command to only see certain rows of the data set.
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+gapminder |>
+  filter(year == 2007)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+The select() command works the same way as filter() but for choosing certain columns
+
+```{r}
+gapminder |>
+  filter(year == 2007) |>
+  select(country, gdpPercap)
+```
+
+### mutate() and rename()
+
+The mutate() command can create new columns using logicals or calculations and rename() can change existing columns' names. 
+
+```{r}
+gapminder |>
+  mutate(
+    gdp = gdpPercap * pop,
+    post_coldwar = if_else(year > 1991, 1, 0)
+  ) |>
+  rename("population" = pop)
+```
+
+Add in a section for join() and pivot_longer()
+
+See Code from Lecture 4, 5, 9, 12, Problem Set 2, 3, 4, 5, 6, 8
+
+## Average Treatment Effect
+
+See Code from Lecture 7, Problem Set 3, 7
+
+## Ggplot
+
+See Code from Lectures 3, Problem Set 1, 2, 3, 4, 5, 6, 7
+
+## Experimental Types
+
+See Code from Lecture 8, Problem Set 3
+
+## Proportion Tables
+
+See Code from Lecture 9, 10
+
+## Z-Score
+
+See Code from Lecture 11
+
+## Linear Models
+
+See Code from Lecture 14, 15, 16, 25, Problem Set 5
+
+## Bootstrapping
+
+See Code from Lecture 17, 19, Problem Set 6, 7, 8
+
+## Confidence Intervals (Code)
+
+See Code from Lecture 20, Problem Set 7
+
+## Confidence Intervals (Math)
+
+See Problem Set 7
+
+## Hypothesis Testing (Code)
+
+See Code from Lecture 21, 22, 25, Problem Set 8
+
+## Hypothesis Testing (Math)
+
+See Problem Set 8
+
+## Normal Distributions
+
+See Code from Lecture 23
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
