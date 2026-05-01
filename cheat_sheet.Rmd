@@ -10,7 +10,13 @@ toc: true
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(gapminder)
+library(ps270data)
 ```
+
+```{r include=F, eval=F}
+data(package = "ps270data")
+```
+
 
 ## Data Wrangling
 
@@ -58,11 +64,57 @@ gapminder |>
   rename("population" = pop)
 ```
 
+### arrange()
+
+The arrange() function will reorder the entries in a column
+
+```{r}
+gapminder |>
+  filter(year == 2007) |>
+  arrange(desc(gdpPercap))
+```
+
+
 Add in a section for join() and pivot_longer()
 
 See Code from Lecture 4, 5, 9, 12, Problem Set 2, 3, 4, 5, 6, 8
 
 ## Average Treatment Effect
+
+The average treatment effect is a way of calculation how much a treatment affects the outcome variable. The formula is the expected outcome variable if all subjects were treated minus the expected outcome if all subjects were not treated. To approximate this, we use the mean of the treatment group for the outcome variable minus the mean of the control group.
+
+I'll use the trains experiments (spanish-speakers in train stations in Boston).
+
+```{r}
+trains |>
+  group_by(treatment) |>
+  summarize(post_mean = mean(numberim.post)) |>
+  pivot_wider(
+    names_from = treatment,
+    values_from = post_mean
+  ) |>
+  mutate(
+    ate = `1` - `0`
+  )
+```
+
+Additionally, you can use select() and pull() to get just the numeric value
+
+```{r}
+trains |>
+  group_by(treatment) |>
+  summarize(post_mean = mean(numberim.post)) |>
+  pivot_wider(
+    names_from = treatment,
+    values_from = post_mean
+  ) |>
+  mutate(
+    ate = `1` - `0`
+  ) |>
+  select(ate) |>
+  pull()
+```
+
 
 See Code from Lecture 7, Problem Set 3, 7
 
