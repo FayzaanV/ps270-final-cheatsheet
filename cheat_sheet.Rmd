@@ -83,7 +83,7 @@ See Code from Lecture 4, 5, 9, 12, Problem Set 2, 3, 4, 5, 6, 8
 
 The average treatment effect is a way of calculation how much a treatment affects the outcome variable. The formula is the expected outcome variable if all subjects were treated minus the expected outcome if all subjects were not treated. To approximate this, we use the mean of the treatment group for the outcome variable minus the mean of the control group.
 
-I'll use the trains experiments (spanish-speakers in train stations in Boston).
+I'll use the trains experiments (Spanish-speakers in train stations in Boston).
 
 ```{r}
 trains |>
@@ -120,7 +120,85 @@ See Code from Lecture 7, Problem Set 3, 7
 
 ## Ggplot
 
-See Code from Lectures 3, Problem Set 1, 2, 3, 4, 5, 6, 7
+ggplot2 is a package that is part of tidyverse that is used to create many types of graphs and visual representations of data. In class, we learned scatterplots, box and whisker plots, barplots, and histograms. These are created using geom_point(), geom_box(), geom_bar() or geom_col(), and geom_histogram(). For a scatterplot, a line of best fit can be added using geom_smooth().
+
+### Scatterplot
+
+```{r}
+midwest |>
+  ggplot(aes(x = percblack, y = percbelowpoverty)) +
+  geom_point(alpha = 0.3) +
+  geom_smooth(method = "lm", se = F) +
+  labs(
+    x = "Percentage of black population",
+    y = "Percentage below the poverty line",
+    title = "Relationship between black and impoverished population in Midwestern counties"
+  )
+```
+
+### Bar plots
+
+```{r}
+midwest |>
+  group_by(state) |>
+  summarize(population = sum(poptotal)) |>
+  ggplot(aes(x = state, y = population)) +
+  geom_col() + 
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    x = "State",
+    y = "Total Population",
+    title = "Population in each Midwestern State"
+  )
+```
+
+### Histogram
+
+```{r}
+midwest |>
+  ggplot(aes(x = percbelowpoverty)) +
+  geom_histogram(binwidth = 2) + 
+  labs(
+    x = "Percentage Below the Poverty Line",
+    y = "Count",
+    title = "Percentage Below the Poverty Line in Midwestern Counties"
+  )
+```
+
+### Box and Whisker Plot
+
+```{r}
+midwest |>
+  ggplot(aes(x = percbelowpoverty)) +
+  geom_boxplot() +
+  facet_wrap(~ state) +
+  scale_y_discrete() +
+  labs(
+    x = "Percentage Below the Poverty Line",
+    title = "Percentage Below the Poverty Line in Midwestern Counties by State"
+  )
+```
+
+### Colors
+
+```{r}
+midwest |>
+  ggplot(
+    aes(
+      x = percbelowpoverty,
+      fill = state,
+      color = state
+    )) +
+  geom_density(alpha = 0.3) +
+  labs(
+    x = "Percentage Below the Poverty Line",
+    y = "Density",
+    title = "Percentage Below the Poverty Line in Midwestern Counties by State"
+  )
+```
+
+
+See Code from Lecture 3, Problem Set 1, 2, 3, 4, 5, 6, 7
 
 ## Experimental Types
 
