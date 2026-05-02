@@ -241,7 +241,24 @@ See Code from Lecture 9, 10
 
 ## Z-Score
 
-The z-score represent how many standard deviations away from the mean a data point is. The formula is (x - mu)/sigma. 
+The z-score represent how many standard deviations away from the mean a data point is. The formula is (x - mu)/sigma, where mu is variable's mean and sigma is the variable's standard deviation. Below I will find the z-score for Cook County, IL for the proportion of people 5 and older who got at least one dose of the COVID vaccine.
+
+```{r}
+dose5_stats <- covid_votes |>
+  summarize(
+    mean_dose5 = mean(one_dose_5plus_pct, na.rm=T), 
+    sd_dose5 = sd(one_dose_5plus_pct, na.rm=T)
+  )
+
+cook_dose5 <- covid_votes |>
+  filter(county == "Cook County" & state == "IL") |>
+  select(one_dose_5plus_pct) |>
+  pull()
+
+cook_z = (cook_dose5 - dose5_stats$mean_dose5) / dose5_stats$sd_dose5
+cook_z
+```
+
 
 See Code from Lecture 11
 
