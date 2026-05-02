@@ -202,6 +202,12 @@ See Code from Lecture 3, Problem Set 1, 2, 3, 4, 5, 6, 7
 
 ## Experimental Types
 
+An observational study is where we simply observe how two variables interact in real life. We do not assign a treatment. This is very common in real life, since we often can't assign treatments due to ethical or logistical reasons. Because we cannot randomly assign treatments, it is much harder to establish causality from an observational study because of a greater chance of confounding variables. On the other hand, Randomized Controlled Trials (RCTs) do have randomly assigned treatment groups. RCTs tend to have a higher internal validity, meaning it is easier to conclude a causal relationship from them. Observational studies tend to have a higher external validity, which means the conclusion can be more easily generalized beyond this study.
+
+### Research Designs
+
+There are three types of research designs. A cross-sectional design compares the control and treatment groups after the treatment has been administered. This assumes the treatment and control groups are on average identical. A before-and-after design compares the treatment group from before and after the treatment was administered. This assumes none of the confounders will vary with time. A difference-in-differences design used the before-and-after of the control group to infer what would've happened to the treatment group if no treatment was administered. This assumes that the trends that affect one group equally affect the other group. All three rely on assumptions that can't always be verified, and are thus more susceptible to confounding variables than a RCT. There are some ways to try and control for confounding variables using statistical procedures, one of which is subclassification. Subclassification is where treated and control groups are compared within the levels of a confounder.
+
 See Code from Lecture 8, Problem Set 3
 
 ## Proportion Tables
