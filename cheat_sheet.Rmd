@@ -327,6 +327,7 @@ This linear model means that the proportion of African Americans that didn't dis
 summary(lobf)
 ```
 
+Calling summary() on a linear model gives us more information than just calling coef(). It gives us p-values for the intercept and the slope, which are in the Pr(>|t|) column. In this case, we can see both the intercept and the slope have nearly zero p-values. The Multiple R-squared is also useful. It shows how well our linear model fits the data set. For this R-squared of 0.047, 4.7% of the variation in percentage below the poverty line is explained by percentage of black population. This means our linear model is not a good fit for the data. A good R-Squared value would be greater than 0.8.
 
 See Code from Lecture 14, 15, 16, 25, Problem Set 5
 
