@@ -264,6 +264,33 @@ See Code from Lecture 11
 
 ## Linear Models
 
+A linear model is a great way to see if one variable has a positive, negative, or no effect on another variable. A linear model can be created using the lm() command. The parameters are lm(dependent variable(s) ~ independent, data set).
+
+```{r}
+lobf <- lm(percbelowpoverty ~ percblack, midwest)
+coef(lobf)
+```
+
+For a county with a black percentage of zero, the percentage below the poverty line is predicted to be 11.93% For every percentage point increase in the black population, the percentage below the poverty line is predicted to increase by 0.22 percentage points.
+
+```{r}
+lobf_2 <- lm(percbelowpoverty ~ percblack + percasian + popdensity + poptotal, midwest)
+coef(lobf_2)
+```
+
+For a county with a black percentage of 0, and Asian percentage of 0, a population density of 0, and a total population of zero, the percentage below the poverty line is expected to be 12.2%. For every percentage point increase in the black population, the percentage below the poverty line is predicted to increase by 0.42 percentage points. For every percentage point increase in the Asian population, the percentage below the poverty line is predicted to decrease by 0.37 percentage points. For every increase by one in population density, the percentage below the poverty line is predicted to decrease by 0.0002 percentage points. For every increase by 1000 in the total population, the percentage below the poverty line is predicted to increase by 0.002 percentage points. Making a linear model with multiple variables can help us isolate confounding effect by comparing the different effects multiple response variables have on the outcome. In the example above, we see one potential confounder could be total population, and it becomes more difficult to draw a causal relationship between black population and percentage beneath the poverty line.
+
+### Categorical and binary variables
+
+A linear model can be used to calculate the ATE if and only if the independent variable is a binary variable. In this case, the ATE would be the slope of the regression line. A linear model can also be used for categorical variables.
+
+```{r}
+lobf_3 <- lm(nondiscrim_post ~ racename, trans)
+coef(lobf_3)
+```
+
+This linear model means that the proportion of African Americans that didn't discriminate post-treatment was 63.5%. Every coefficient is how other races compare to that score. For example, the proportion of Asians that didn't discriminate post-treatment is 19.8 percentage points highet and the percentage of Native Americans that didn't discriminate post-treatment was 6.3 percentage points lower.
+
 See Code from Lecture 14, 15, 16, 25, Problem Set 5
 
 ## Bootstrapping
