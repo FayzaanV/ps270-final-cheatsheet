@@ -290,13 +290,13 @@ lobf_3 <- lm(nondiscrim_post ~ racename, trans)
 coef(lobf_3)
 ```
 
-This linear model means that the proportion of African Americans that didn't discriminate post-treatment was 63.5%. Every coefficient is how other races compare to that score. For example, the proportion of Asians that didn't discriminate post-treatment is 19.8 percentage points highet and the percentage of Native Americans that didn't discriminate post-treatment was 6.3 percentage points lower.
+This linear model means that the proportion of African Americans that didn't discriminate post-treatment was 63.5%. Every coefficient is how other races compare to that score. For example, the proportion of Asians that didn't discriminate post-treatment is 19.8 percentage points higher and the percentage of Native Americans that didn't discriminate post-treatment was 6.3 percentage points lower.
 
 See Code from Lecture 14, 15, 16, 25, Problem Set 5
 
 ## Bootstrapping
 
-Bootstrapping is the process of creating a sampling distribution from a single sample. It is incredibly useful because in many cases, we don't have access to the full population data or multiple samples. It creates multiple samples of the same size as the one we have be repeatedly drawing with replacement from our sample. This creates a sampling distribution of the same shape (spread) as the population sampling distribution would be, but centered at the sample statistic. We can then use the bootstrap for calculating confidence intervals or hypothesis tests because it's shape is the same.
+Bootstrapping is the process of creating a sampling distribution from a single sample. It is incredibly useful because in many cases, we don't have access to the full population data or multiple samples. It creates multiple samples of the same size as the one we have be repeatedly drawing with replacement from our sample. This creates a sampling distribution of the same shape (spread) as the sampling distribution would be, but centered at the sample statistic. We can then use the bootstrap for calculating confidence intervals or hypothesis tests because it's shape is the same.
 
 I will show both the dplyr and infer workflows for making a bootstrap to calculate the proportion of all Americans who want the government to do more about the environment using one sample from the American national election survey.
 
@@ -399,11 +399,75 @@ See Code from Lecture 20, Problem Set 7
 
 A hypothesis tests provides statistically significant evidence to reject or fail to reject a claim about a population parameter. The null hypothesis is typically that no special relationship has been found. The alternative hypothesis is typically that the sample statistic is meaningful. Hypothesis tests do this by calculating a p-value, which states how rare an outcome as or more extreme as the sample statistic would be assuming the null hypothesis is true.
 
+I will test if life expectancy in Africa is the same as in the Americas in 2007 using the gapminder data. The null hypothesis is that they will be the same.
+
 ### Dplyr Testing
+
+```{r}
+set.seed(414)
+life_diff <- gapminder |>
+  filter(year == 2007, continent %in% c("Africa", "Americas")) |>
+  group_by(continent) |>
+  summarize(mean_life = mean(lifeExp)) |>
+  pivot_wider(
+    names_from = continent, 
+    values_from = mean_life
+  ) |>
+  mutate(
+    diff = Americas - Africa
+  ) |>
+  select(diff) |>
+  pull()
+
+dplyr_null <- gapminder |>
+  filter(year == 2007, continent %in% c("Africa", "Americas")) |>
+  rep_slice_sample(prop = 1, replace = FALSE, reps = 1000) |>
+  group_by(replicate) |>
+  mutate(
+    continent_shuffled = sample(continent)
+  ) |>
+  group_by(replicate, continent_shuffled) |>
+  summarize(mean_life = mean(lifeExp)) |>
+  pivot_wider(
+    names_from = continent_shuffled, 
+    values_from = mean_life
+  ) |>
+  mutate(
+    diff = Americas - Africa
+  )
+
+dplyr_null |>
+  summarize(p_value = mean(abs(diff) >= abs(life_diff)))
+```
+
 
 ### Infer Testing
 
 Here's how to do it using the infer package
+
+```{r}
+set.seed(414)
+infer_diff <- gapminder |>
+  filter(year == 2007, continent %in% c("Africa", "Americas")) |>
+  specify(lifeExp ~ continent) |>
+  calculate(stat = "diff in means", order = c("Americas", "Africa"))
+
+infer_null <- gapminder |>
+  filter(year == 2007, continent %in% c("Africa", "Americas")) |>
+  specify(lifeExp ~ continent) |>
+  hypothesize(null = "independence") |>
+  generate(reps = 1000, type = "permute") |>
+  calculate(stat = "diff in means", order = c("Americas", "Africa"))
+
+infer_null |>
+  get_p_value(obs_stat = infer_diff, direction = "both")
+
+infer_null |>
+  visualize() +
+  shade_p_value(obs_stat = infer_diff, direction = "both")
+```
+
+In both cases, the p-values is approximately zero. This means that assuming the null hypothesis is true, there is a near zero percent chance of obtaining a sample difference in means as or more extreme as 18.2. Therefore, we can reject the null hypothesis at the alpha = 0.05 level.
 
 See Code from Lecture 21, 22, 25, Problem Set 8
 
