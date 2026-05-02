@@ -11,6 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(gapminder)
 library(ps270data)
+library(infer)
 ```
 
 ```{r include=F, eval=F}
@@ -294,6 +295,51 @@ This linear model means that the proportion of African Americans that didn't dis
 See Code from Lecture 14, 15, 16, 25, Problem Set 5
 
 ## Bootstrapping
+
+Bootstrapping is the process of creating a sampling distribution from a single sample. It is incredibly useful because in many cases, we don't have access to the full population data or multiple samples. It creates multiple samples of the same size as the one we have be repeatedly drawing with replacement from our sample. This creates a sampling distribution of the same shape (spread) as the population sampling distribution would be, but centered at the sample statistic. We can then use the bootstrap for calculating confidence intervals or hypothesis tests because it's shape is the same.
+
+I will show both the dplyr and infer workflows for making a bootstrap to calculate the proportion of all Americans who want the government to do more about the environment using one sample from the American national election survey.
+
+```{r}
+set.seed(53132)
+dplyr_boots <- anes |>
+  rep_slice_sample(reps = 1000, prop = 1, replace = T) |>
+  group_by(replicate) |>
+  summarize(mean_envir = mean(envir_doing_more))
+
+dplyr_boots
+```
+
+When being visualized, this bootstrap distribution should have an approximately normal distribution.
+
+```{r}
+dplyr_boots |>
+  ggplot(aes(x = mean_envir)) +
+  geom_histogram(binwidth = 0.001) +
+  labs(
+    x = "Proportion who believes the government should be doing more",
+    y = "Count"
+  )
+```
+
+### Infer package
+
+This can also be done using the infer package
+
+```{r}
+set.seed(60004)
+infer_boots <- anes |>
+  specify(response = envir_doing_more) |>
+  generate(reps = 1000, type = "bootstrap") |>
+  calculate(stat = "mean")
+infer_boots
+```
+
+Infer can also be used to visualize the bootstrap distribution
+
+```{r}
+visualize(infer_boots)
+```
 
 See Code from Lecture 17, 19, Problem Set 6, 7, 8
 
