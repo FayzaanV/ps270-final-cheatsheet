@@ -347,6 +347,52 @@ See Code from Lecture 17, 19, Problem Set 6, 7, 8
 
 ## Confidence Intervals
 
+### Dplyr CIs
+
+A confidence interval gives a range of plausible values for a population parameter, given a sample statistic at a confidence level. It can be used to find a population mean or proportion. It is often used for ATEs to see if zero is in the interval or not.
+
+```{r}
+set.seed(414)
+trans_ate_boots <- trans |>
+  rep_slice_sample(prop = 1, replace = T, reps = 1000) |>
+  group_by(replicate, treat_ind) |>
+  summarize(post_mean = mean(nondiscrim_post)) |>
+  pivot_wider(
+    names_from = treat_ind,
+    values_from = post_mean
+  ) |>
+  mutate(
+    ate = `1` - `0`
+  ) |>
+  select(replicate, ate)
+
+trans_ate_boots |>
+  get_confidence_interval(type = "percentile", level = 0.95)
+```
+
+For an ATE, a 95% confidence interval means that if the experiement were repeated many, many times, 95% of calculated intervals would contain the true population ATE.
+Since zero is contained in the interval, we do not have statistically significant evidence that having a conversation about trans people has an affect on peoples' opinions of trans people.
+
+### Infer CIs
+
+The same can also be done with the infer package
+
+```{r}
+set.seed(414)
+trans_boots <- trans |>
+  mutate(
+    treatment = if_else(treat_ind == 1, "Treated", "Control")
+  ) |>
+  specify(nondiscrim_post ~ treatment) |> # (response ~ explanatory)
+  generate(reps = 1000, type = "bootstrap") |>
+  calculate(stat = "diff in means", order = c("Treated", "Control"))
+
+trans_ci <- trans_boots |>
+  get_confidence_interval(level = 0.95, type = "percentile")
+trans_ci
+```
+
+
 See Code from Lecture 20, Problem Set 7
 
 ## Hypothesis Testing
