@@ -544,11 +544,42 @@ See Code from Lecture 21, 22, 25, Problem Set 8
 
 ### Interpret an ATE
 
+The average treatment effect is [ATE]. This means that [treatment group] had a [higher/lower] [outcome variable] by [absolute value of ATE with units], on average.
+
+Example:
+The average treatment effect is 0.097. This means that registered Democrats had a higher COVID vaccination rate by 9.7 percentage points, on average.
+
 ### Interpret linear coefficients
+
+When [all independent variables] are equal to zero, the value of [outcome variable] is predicted to be [intercept value with units].
+
+Example:
+When a country's GDP per capita is equal to zero, it's life expectancy is predicted to be 11.3 years.
+
+For every [one unit] increase of [independent variable], the [outcome variable] is predicted to [increase/decrease] by [absolute value of slope with units], holding all other variables constant.
+
+Example:
+For every percentage point increase of COVID vaccination, the Democrat vote share of a county is predicted to increase by 0.89 percentage points, holding all other variables constant.
 
 ### Interpret a CI
 
+We are [confidence level]% confident that the true population [parameter] of [variable/relationship] is between [lower bound] and [upper bound with units]. 
+
+FOR AN ATE CONFIDENCE INTERVAL, ADD:
+Since zero [is/is not] contained in the interval, we [do not have/have] statistically significant evidence that [treatment] has an effect on [outcome variable] at the alpha = [1 - confidence level] level.
+
+Example:
+We are 95% confident that the true population ATE of having a conversation about trans people on non-discrimination attitudes is between -0.04 and 0.11. Since zero is contained in the interval, we do not have statistically significant evidence that having a conversation about trans people has an effect on nondiscrimination attitudes at the alpha = 0.05 level.
+
+OPTIONAL:
+If we were to repeat this sampling process many, many times and construct a confidence interval each time, [confidence level]% of those intervals would contain the true population [parameter].
+
 ### Interpret a p-value
+
+The p-value is [p-value]. This means that, assuming the null hypothesis of [state null hypothesis] is true, there is a [p-value * 100] chance of observing a sample [statistic] as or more extreme than [observed statistic value]. Since the p-value [is less than/is greater than] alpha = [significance level], we [reject/fail to reject] the null hypothesis. We [have/do not have] statistically significant evidence that [alternative hypothesis].
+
+Example:
+The p-value is 0.038. This means that, assuming the null hypothesis of no relationship between percentage of black population and percentage below the poverty line is true, there is a 3.8% chance of observing a sample slope as or more extreme than 0.006. Since the p-value is less than alpha = 0.05, we reject the null hypothesis. We have statistically significant evidence that there is a relationship between relationship between percentage of black population and percentage below the poverty line.
 
 
 
