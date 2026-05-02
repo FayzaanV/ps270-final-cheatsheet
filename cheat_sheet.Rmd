@@ -292,6 +292,13 @@ coef(lobf_3)
 
 This linear model means that the proportion of African Americans that didn't discriminate post-treatment was 63.5%. Every coefficient is how other races compare to that score. For example, the proportion of Asians that didn't discriminate post-treatment is 19.8 percentage points higher and the percentage of Native Americans that didn't discriminate post-treatment was 6.3 percentage points lower.
 
+### Summary of a Linear Model
+
+```{r}
+summary(lobf)
+```
+
+
 See Code from Lecture 14, 15, 16, 25, Problem Set 5
 
 ## Bootstrapping
@@ -471,8 +478,47 @@ infer_null |>
 
 In both cases, the p-value is approximately zero. This means that assuming the null hypothesis is true, there is a near zero percent chance of obtaining a sample difference in means as or more extreme as 18.8. Therefore, we can reject the null hypothesis at the alpha = 0.05 level.
 
+### Hypothesis test for a slope
+
+Now we will see if GDP per capita has an affect on life expectancy in 2007
+
+```{r}
+set.seed(414)
+gap_2007 <- gapminder |>
+  filter(year == 2007)
+
+lobf_4 <- lm(lifeExp ~ gdpPercap, gap_2007)
+coef(lobf_4)
+
+# Or could use infer to find observed slope
+
+infer_slope <- gap_2007 |>
+  specify(lifeExp ~ gdpPercap) |>
+  calculate(stat = "slope")
+
+slope_null <- gap_2007 |>
+  specify(lifeExp ~ gdpPercap) |>
+  hypothesize(null = "independence") |>
+  generate(reps = 1000, type = "permute") |>
+  calculate(stat = "slope")
+
+slope_null |>
+  get_p_value(obs_stat = infer_slope, direction = "both")
+```
+
+Since the p-value is approximately zero, we reject the null hypothesis at the alpha = 0.05 level. We have statistically significant evidence that GDP per capita has a non-zero effect on life expectancy.
+
 See Code from Lecture 21, 22, 25, Problem Set 8
 
+## Scripts
+
+### Interpret an ATE
+
+### Interpret linear coefficients
+
+### Interpret a CI
+
+### Interpret a p-value
 
 
 
