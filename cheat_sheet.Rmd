@@ -212,9 +212,36 @@ See Code from Lecture 8, Problem Set 3
 
 ## Proportion Tables
 
+```{r}
+cces_2020 |>
+  group_by(pres_vote) |>
+  summarize(n = n()) |>
+  mutate(proportion = n / sum(n))
+```
+
+For multiple grouping variables, see below
+
+```{r}
+cces_2020 |>
+  filter(pres_vote %in% c("Joe Biden (Democrat)", "Donald J. Trump (Republican)")) |>
+  mutate(pres_vote = if_else(pres_vote == "Joe Biden (Democrat)", "Biden", "Trump")) |>
+  group_by(pid3, pres_vote) |>
+  summarize(n = n()) |>
+  mutate(prop = n/sum(n)) |>
+  select(!n) |>
+  pivot_wider(
+    names_from = pid3,
+    values_from = prop
+  ) |>
+  knitr::kable()
+```
+
+
 See Code from Lecture 9, 10
 
 ## Z-Score
+
+The z-score represent how many standard deviations away from the mean a data point is. The formula is (x - mu)/sigma. 
 
 See Code from Lecture 11
 
