@@ -29,10 +29,12 @@ I will use the gapminder data set to demonstrate some of these commands
 
 First, I can use the group_by() and summarize() commands to find the mean GDP per capita for each continent.
 
+When using mean(),  median(), min(), max(), sd(), or sum() in summarize(), any NA values will lead to the whole result being NA. To avoid this, add "na.rm = T" in the summarize() call.
+
 ```{r}
 gapminder |>
   group_by(continent) |>
-  summarize(mean_gdppc = mean(gdpPercap))
+  summarize(mean_gdppc = mean(gdpPercap, na.rm = T))
 ```
 
 ### filter() and select()
