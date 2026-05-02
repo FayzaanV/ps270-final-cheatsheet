@@ -75,8 +75,35 @@ gapminder |>
   arrange(desc(gdpPercap))
 ```
 
+### Joining and pivot_longer()
 
-Add in a section for join() and pivot_longer()
+pivot_longer() is the opposite of pivot_wider(). It takes data from columns and transforms them into rows. A good example of this is the mortality data set. It has a column for each year 1972 to 2020 for infant mortatility in that year. We could switch this to one row for each year per country.
+
+```{r}
+mortality
+mortality_long <- mortality |>
+  select(!indicator) |>
+  pivot_longer(
+    cols = `1972`:`2020`,
+    names_to = "year",
+    values_to = "child_mortality"
+  ) |>
+  drop_na(child_mortality)
+mortality_long
+```
+
+Joining comibnes two different data sets based on common variables, aka keys. There are three types of join functions: left_join() keeps all rows in the left data set and add columns from the right, right_join() does the same but for the right data set, and inner_join() only keeps rows which are present in both data sets. I'll demonstrate with gapminder and mortality.
+
+```{r}
+mortality_long <- mortality_long |> #First, we have to make sure the year column in
+  # both data sets are integer so they can be joined
+  mutate(
+    year = as.integer(year)
+  )
+gapminder |>
+  inner_join(mortality_long, by = "year") |>
+  select(country.x, continent, year, lifeExp, pop, gdpPercap, child_mortality)
+```
 
 See Code from Lecture 4, 5, 9, 12, Problem Set 2, 3, 4, 5, 6, 8
 
