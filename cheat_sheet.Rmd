@@ -296,6 +296,8 @@ See Code from Lecture 14, 15, 16, 25, Problem Set 5
 
 ## Bootstrapping
 
+### Dplyr bootstrapping
+
 Bootstrapping is the process of creating a sampling distribution from a single sample. It is incredibly useful because in many cases, we don't have access to the full population data or multiple samples. It creates multiple samples of the same size as the one we have be repeatedly drawing with replacement from our sample. This creates a sampling distribution of the same shape (spread) as the population sampling distribution would be, but centered at the sample statistic. We can then use the bootstrap for calculating confidence intervals or hypothesis tests because it's shape is the same.
 
 I will show both the dplyr and infer workflows for making a bootstrap to calculate the proportion of all Americans who want the government to do more about the environment using one sample from the American national election survey.
@@ -322,7 +324,7 @@ dplyr_boots |>
   )
 ```
 
-### Infer package
+### Infer bootstrapping
 
 This can also be done using the infer package
 
@@ -343,21 +345,13 @@ visualize(infer_boots)
 
 See Code from Lecture 17, 19, Problem Set 6, 7, 8
 
-## Confidence Intervals (Code)
+## Confidence Intervals
 
 See Code from Lecture 20, Problem Set 7
 
-## Confidence Intervals (Math)
-
-See Problem Set 7
-
-## Hypothesis Testing (Code)
+## Hypothesis Testing
 
 See Code from Lecture 21, 22, 25, Problem Set 8
-
-## Hypothesis Testing (Math)
-
-See Problem Set 8
 
 ## Normal Distributions
 
